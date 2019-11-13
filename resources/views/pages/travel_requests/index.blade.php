@@ -106,9 +106,9 @@
                                             <td> @if(isset($request->cdcs->id)) {{ $request->cdcs->id . ' | ' . $request->cdcs->description }} @endif </td>
                                             <td> @if(isset($request->address->id)) {{ $request->address->id . ' | ' . $request->address->description }} @endif </td>
                                             <td>{{$request->indirizzo_scarico}}</td>
-                                            <td>{{$request->codice_cdc_carico}}</td>
+                                            <td>{{$request->cdcs->description}}</td>
                                             <td>{{$request->indirizzo_carico}}</td>
-                                            <td>{{$request->codice_cdc_scarico}}</td>
+                                            <td>{{$request->cdcs->description}}</td>
                                             <td>
                                                 <a href="{{route('travel_requests.edit',$request->id)}}" class=""><i
                                                             class="feather icon-edit" vx-tooltip
