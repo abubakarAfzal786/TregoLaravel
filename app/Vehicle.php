@@ -9,5 +9,8 @@ class Vehicle extends Model
     function atiname(){
     	return $this->belongsTo(Ati::class , 'atiId' , 'id');
     }
+    function transaction(){
+    	return $this->belongsTo(Transaction::class, 'id' , 'vehicleId');
+    }
 
 }

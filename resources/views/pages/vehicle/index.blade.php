@@ -5,6 +5,13 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/colors/palette-gradient.css') }}" >
     <!-- END: Page CSS-->
+    <style type="text/css">
+        .fabutton{
+            background: none;
+              padding: 0px;
+              border: none;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -68,8 +75,16 @@
                                         
 
                                         <td>
-                                            <a class=""><i class="feather icon-edit"></i></a>
-                                            <a class=""><i class="feather icon-trash"></i></a>
+                                            <a class="" href="{{route('vehicles.edit' , $value->id)}}"><i class="feather icon-edit"></i></a>
+                                            <form action="{{route('vehicles.destroy' , $value->id)}}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" name="id" value="{{$value->id}}">
+                                           <button type="submit" class="fabutton"><i class="feather icon-trash"></i></button>
+
+                                                
+                                            </form>
+                                           <!--  <a class=""><i class="feather icon-trash"></i></a> -->
                                         </td>
                                     </tr>
                                     @endforeach

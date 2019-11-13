@@ -28,7 +28,9 @@ class VehicleController extends Controller
      */
     public function create()
     {
-        return view('pages.vehicle.create');
+        $data=[];
+        $data['ati'] = \App\Ati::all();
+        return view('pages.vehicle.create', $data);
     }
 
     /**
@@ -39,7 +41,27 @@ class VehicleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd(request()->all());
+        if(request('stato_richiesta') == '' || request('stato_richiesta')==null || empty(request('stato_richiesta')) ){
+            return redirect()->back();
+        }
+        else{
+            
+            $car = new \App\Vehicle();
+            $car->atiId = request('stato_richiesta',  0);
+            $car->brand = request('brand' , '');
+            $car->description = request('description', '');
+            $car->barcode = request('barcode' , '');
+            $car->model = request('model' , '');
+            $car->plateNumber = request('numberplate', '');
+            $car->probeId = 0;
+            $car->temperatureConstraintId=11;
+            $car->ecuId = 0 ;
+            $car->save();
+            return redirect('/vehicles');
+        }
+        
+
     }
 
     /**
@@ -61,8 +83,10 @@ class VehicleController extends Controller
      */
     public function edit(Vehicle $vehicle)
     {
-
-        return view('pages.vehicle.edit');
+        $data = [];
+        $data['car'] = $vehicle;
+        $data['ati'] = \App\Ati::all();
+        return view('pages.vehicle.edit' , $data);
     }
 
     /**
@@ -74,7 +98,20 @@ class VehicleController extends Controller
      */
     public function update(Request $request, Vehicle $vehicle)
     {
-        //
+        if(request('stato_richiesta') == " " || empty(request('stato_richiesta')) || request('stato_richiesta') == null){
+            return redirect()->back();
+
+        }
+        else{
+            $vehicle->atiId = request('stato_richiesta');
+            $vehicle->brand = request('brand');
+            $vehicle->model = request('model');
+            $vehicle->description= request('description');
+            $vehicle->plateNumber= request('numberPlate');
+            $vehicle->barcode = request('barcode');
+            $vehicle->save();
+            return redirect('/vehicles');
+         }
     }
 
     /**
@@ -85,6 +122,8 @@ class VehicleController extends Controller
      */
     public function destroy(Vehicle $vehicle)
     {
-        //
+        // dd($vehicle);
+        $vehicle->delete();
+        return redirect('/vehicles');
     }
 }

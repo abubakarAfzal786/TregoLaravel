@@ -14,7 +14,10 @@ class ProbeController extends Controller
      */
     public function index()
     {
-        return view('pages.probe.index');
+        $data = [];
+        $data['listing'] = \App\Probe::paginate(20);
+
+        return view('pages.probe.index' , $data);
 
     }
 
@@ -25,7 +28,9 @@ class ProbeController extends Controller
      */
     public function create()
     {
-        return view('pages.probe.create');
+        $data = [];
+        $data['ati'] = \App\Ati::all();
+        return view('pages.probe.create', $data);
 
     }
 
@@ -37,7 +42,20 @@ class ProbeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(request('stato_richiesta') == " " || empty(request('stato_richiesta')) || request('stato_richiesta') == null){
+            return redirect()->back();
+
+        }
+        else{
+            $prob = new \App\Probe();
+            $prob->description = request('description', ' ');
+            $prob->atiId = request('stato_richiesta');
+            $prob->calibrationExpireTime = request('date' , ' ' );
+            $prob->barcode = request('barcode' , ' ');
+            $prob->usedFor = request('usedas' , ' ');
+            $prob->save();
+            return redirect('/probe');
+        }
     }
 
     /**
@@ -59,7 +77,10 @@ class ProbeController extends Controller
      */
     public function edit(Probe $probe)
     {
-        return view('pages.probe.edit');
+        $data = [];
+        $data['ati'] = \App\Ati::all();
+        $data['prob'] = $probe;
+        return view('pages.probe.edit' , $data);
 
     }
 
@@ -72,7 +93,19 @@ class ProbeController extends Controller
      */
     public function update(Request $request, Probe $probe)
     {
-        //
+        if(request('stato_richiesta') == " " || empty(request('stato_richiesta')) || request('stato_richiesta') == null){
+            return redirect()->back();
+
+        }
+        else{
+            $probe->atiId = request('stato_richiesta');
+            $probe->barcode = request('barcode', '');
+            $probe->description = request('description','');
+            $probe->usedFor = request('usedas' , '');
+            $probe->calibrationExpireTime = request('date' , '');
+            $probe->save();
+            return rediect()->back();
+        }
     }
 
     /**
@@ -83,6 +116,8 @@ class ProbeController extends Controller
      */
     public function destroy(Probe $probe)
     {
-        //
+        // dd($probe);
+        $probe->delete();
+        return redirect('/probe');
     }
 }
