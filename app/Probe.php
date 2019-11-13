@@ -18,4 +18,8 @@ $probe->equipment()->delete();
        });
    }
 
+   public function atiname(){
+      return $this->belongsTo(Ati::class , 'atiId' , 'id');
+    }
+
 }

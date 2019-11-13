@@ -5,6 +5,13 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/colors/palette-gradient.css') }}" >
     <!-- END: Page CSS-->
+        <style type="text/css">
+        .fabutton{
+            background: none;
+              padding: 0px;
+              border: none;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -48,28 +55,37 @@
                                         <th> <a href="#">Id </a>  </th>
                                         <th> <a href="#">Ati </a> </th>
                                         <th>  <a href="#">Barcode </a> </th>
-                                        <th> <a href="#">		Nome</a> </th>
-                                        <th> <a href="#"> Valida fino	</a>  </th>
-                                        <th> <a href="#">	Tipo </a> </th>
+                                        <!-- <th> <a href="#">Nome</a> </th> -->
+                                        <th> <a href="#"> Valida fino   </a>  </th>
+                                        <!-- <th> <a href="#">  Tipo </a> </th> -->
                                         <th> <a href="#">Adibito a </a> </th>
                                         <th> <a href="#">Azioni</a> </th>
 
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>#</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
-                                        <td>2011/04/25</td>
-                                        <td>2011/04/25</td>
-                                        <td>2011/04/25</td>
-                                        <td>
-                                            <a class=""><i class="feather icon-edit"></i></a>
-                                            <a class=""><i class="feather icon-trash"></i></a>
+                                    
+                                        @foreach($listing as $key => $list)
+                                        <tr>
+                                            <td>{{$list->id}}</td>
+                                            <td>{{$list->atiname->description}}</td>
+                                            <td>{{$list->barcode}}</td>
+                                            <td>{{$list->calibrationExpireTime}}</td>
+                                            <td>{{$list->usedFor}}</td>
+                                            <td>
+                                            <a class="" href="{{route('probe.edit' , $list->id)}}"><i class="feather icon-edit"></i></a>
+                                            
+                                            <form action="{{route('probe.destroy' , $list->id)}}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="fabutton"><i class="feather icon-trash"></i></button>
+                                            </form>
+                                            <!-- <a class=""><i class="feather icon-trash"></i></a> -->
                                         </td>
-                                    </tr>
+                                        </tr>
+                                        @endforeach
+                                        
+                                    
 
                                     </tfoot>
                                 </table>
@@ -110,4 +126,3 @@
     <!-- END: Page JS-->
 
 @endsection
-

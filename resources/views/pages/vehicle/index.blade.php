@@ -5,6 +5,13 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/colors/palette-gradient.css') }}" >
     <!-- END: Page CSS-->
+    <style type="text/css">
+        .fabutton{
+            background: none;
+              padding: 0px;
+              border: none;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -56,20 +63,31 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    @foreach($listing as $key=>$value)   
                                     <tr>
-                                        <td>#</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
-                                        <td>2011/04/25</td>
-                                        <td>$320,800</td>
-                                        <td>#</td>
+                                        <td>{{$value->id}}</td>
+                                        <td>{{$value->atiname->description}}</td>
+                                        <td>{{$value->brand}}</td>
+                                        <td>{{$value->model}}</td>
+                                        <td>{{$value->barcode}}</td>
+                                        <td>{{$value->description}}</td>
+                                        <td>{{$value->plateNumber}}</td>
+                                        
 
                                         <td>
-                                            <a class=""><i class="feather icon-edit"></i></a>
-                                            <a class=""><i class="feather icon-trash"></i></a>
+                                            <a class="" href="{{route('vehicles.edit' , $value->id)}}"><i class="feather icon-edit"></i></a>
+                                            <form action="{{route('vehicles.destroy' , $value->id)}}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" name="id" value="{{$value->id}}">
+                                           <button type="submit" class="fabutton"><i class="feather icon-trash"></i></button>
+
+                                                
+                                            </form>
+                                           <!--  <a class=""><i class="feather icon-trash"></i></a> -->
                                         </td>
                                     </tr>
+                                    @endforeach
 
                                     </tfoot>
                                 </table>
@@ -110,4 +128,3 @@
     <!-- END: Page JS-->
 
 @endsection
-

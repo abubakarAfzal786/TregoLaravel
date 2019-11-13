@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Vehicle;
 use Illuminate\Http\Request;
-
 class VehicleController extends Controller
 {
     /**
@@ -14,9 +11,12 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        return view('pages.vehicle.index');
+        $data=[];
+        $data['listing']= \App\Vehicle::orderBy('id', 'DESC')->get();
+        // $data['listing']= $data['listing']->paginate(15);
+        // dd($data['listing']);
+        return view('pages.vehicle.index',$data);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -24,9 +24,10 @@ class VehicleController extends Controller
      */
     public function create()
     {
-        return view('pages.vehicle.create');
+        $data=[];
+        $data['ati'] = \App\Ati::all();
+        return view('pages.vehicle.create', $data);
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -35,9 +36,27 @@ class VehicleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd(request()->all());
+        if(request('stato_richiesta') == '' || request('stato_richiesta')==null || empty(request('stato_richiesta')) ){
+            return redirect()->back();
+        }
+        else{
+            
+            $car = new \App\Vehicle();
+            $car->atiId = request('stato_richiesta',  0);
+            $car->brand = request('brand' , '');
+            $car->description = request('description', '');
+            $car->barcode = request('barcode' , '');
+            $car->model = request('model' , '');
+            $car->plateNumber = request('numberplate', '');
+            $car->probeId = 0;
+            $car->temperatureConstraintId=11;
+            $car->ecuId = 0 ;
+            $car->save();
+            return redirect('/vehicles');
+        }
+        
     }
-
     /**
      * Display the specified resource.
      *
@@ -48,7 +67,6 @@ class VehicleController extends Controller
     {
         //
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -57,10 +75,11 @@ class VehicleController extends Controller
      */
     public function edit(Vehicle $vehicle)
     {
-
-        return view('pages.vehicle.edit');
+        $data = [];
+        $data['car'] = $vehicle;
+        $data['ati'] = \App\Ati::all();
+        return view('pages.vehicle.edit' , $data);
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -70,9 +89,20 @@ class VehicleController extends Controller
      */
     public function update(Request $request, Vehicle $vehicle)
     {
-        //
+        if(request('stato_richiesta') == " " || empty(request('stato_richiesta')) || request('stato_richiesta') == null){
+            return redirect()->back();
+        }
+        else{
+            $vehicle->atiId = request('stato_richiesta');
+            $vehicle->brand = request('brand');
+            $vehicle->model = request('model');
+            $vehicle->description= request('description');
+            $vehicle->plateNumber= request('numberPlate');
+            $vehicle->barcode = request('barcode');
+            $vehicle->save();
+            return redirect('/vehicles');
+         }
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -81,6 +111,8 @@ class VehicleController extends Controller
      */
     public function destroy(Vehicle $vehicle)
     {
-        //
+        // dd($vehicle);
+        $vehicle->delete();
+        return redirect('/vehicles');
     }
 }
