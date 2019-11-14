@@ -16,7 +16,8 @@ class DeviceController extends Controller
      */
     public function index()
     {
-        return view('pages.device.index');
+        $device=Device::where('active',1)->orderBy('id','desc')->paginate(10);
+        return view('pages.device.index')->with('devices',$device);
     }
 
     /**
@@ -38,7 +39,22 @@ class DeviceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $collection=[];
+        $device=new Device();
+        $device->atiId=request('stato_richiesta');
+        $device->barcode=request('barcode');
+        $device->imei=request('imei');
+        $device->description=request('description');
+        $k=request('k');
+        $v=request('v');
+$collection[]=array(
+    "k"=>$k,
+    "v"=>$v
+);
+$settings=json_encode($collection);
+$device->settings_json=$settings;
+$device->save();
+return redirect()->back();
     }
 
     /**
@@ -49,7 +65,7 @@ class DeviceController extends Controller
      */
     public function show(Device $device)
     {
-        //
+        
     }
 
     /**
@@ -60,7 +76,9 @@ class DeviceController extends Controller
      */
     public function edit(Device $device)
     {
-        return view('pages.device.edit');
+        $settings=json_decode($device->settings_json);
+        
+        return view('pages.device.edit',compact('settings','device'));
 
     }
 
@@ -73,7 +91,21 @@ class DeviceController extends Controller
      */
     public function update(Request $request, Device $device)
     {
-        //
+        $update_device=new Device();
+        $update_device->atiId=request('stato_richiesta');
+        $update_device->barcode=request('barcode');
+        $update_device->imei=request('imei');
+        $update_device->description=request('description');
+        $k=request('k');
+        $v=request('v');
+$collection[]=array(
+    "k"=>$k,
+    "v"=>$v
+);
+$settings=json_encode($collection);
+$update_device->settings_json=$settings;
+        $update_device->update();
+        return view('pages.device.index');
     }
 
     /**
@@ -84,6 +116,7 @@ class DeviceController extends Controller
      */
     public function destroy(Device $device)
     {
-        //
+        $device->delete();
+        return redirect()->back();
     }
 }

@@ -1,11 +1,5 @@
 @extends('layouts.app')
-<style>
-.fabutton {
-  background: none;
-  padding: 0px;
-  border: none;
-}
-</style>
+
 @section('style')
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
@@ -78,10 +72,10 @@
                                         <td>{{$planHand->planTimeFrom}}</td>
                                         <td>{{$planHand->planTimeTo}}</td>
                                         <td>
-                                        @if($planHand->places_json)
+                                        @if($request->places_json)
                                        
                                         <ul>
-                                            @foreach(jsoon_data($planHand->places_json) as $data)
+                                            @foreach(jsoon_data($request->places_json) as $data)
                                              <?php
   if($data->addressId){                              
 $name=DB::table('addresses')->where('id',$data->addressId)->first();
@@ -108,8 +102,7 @@ $name=DB::table('addresses')->where('id',$data->addressId)->first();
                                             <form class="formHidden" action="{{ route('plans_handheld.destroy', $planHand->id)}}" method="post">
                                                 @csrf
                                                 @method('DELETE')
-                                                <a class="planHandheldrequest" href="#" ></a>
-                                                <button type="submit" class="fabutton"><i class="feather icon-trash"></i></button>
+                                                <a class="planHandheldrequest" href="#" ><i class="feather icon-trash"></i></a>
                                             </form>
                                         </td>
                                     </tr>

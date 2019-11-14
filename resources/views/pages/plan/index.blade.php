@@ -65,8 +65,35 @@
                                         <td>{{$request->description}}</td>
                                         <td>{{$request->note}}</td>
                                         <td>{{$request->weekdays_json}}</td>
+                                       
                                         <td>{{$request->temperatureConstraintId}}</td>
-                                        <td>{{$request->places_json}}</td>
+                                                           
+                                        <td>
+                                        @if($request->places_json)
+                                       
+                                        <ul>
+                                            @foreach(jsoon_data($request->places_json) as $data)
+                                             <?php
+  if($data->addressId){                              
+$name=DB::table('addresses')->where('id',$data->addressId)->first();
+
+?>
+                                            
+                                            
+                                            <li> {{$data->dateTime}} {{$name->description}} {{$data->dateTime}}</li> 
+                                            
+<?php
+}
+?>
+                                           
+                                           
+                                            
+                                            @endforeach
+                                            </ul> 
+                                   @endif
+                                   </td>
+                                                           
+                                      
                                         <td>{{$request->plansCustoms}}</td>
                                         <td>
                                             <a class=""><i class="feather icon-edit"></i></a>

@@ -17,10 +17,11 @@
                             <select required="" data-select-2="" name="stato_richiesta"
                                     class="form-control input-sm select2-hidden-accessible" id="crud-stato_richiesta">
                                 <option value=""> -</option>
-                                <option value="I" selected="">In Lavorazione</option>
-                                <option value="R">In Attesa</option>
-                                <option value="C">Pianficata</option>
-                                <option value="A">Annullata</option>
+                                @foreach (ati() as $item)
+                        <option value="{{$item->id}}">{{$item->description}}</option>
+                                    
+                                @endforeach
+                               
                             </select>
                         </div>
                     </div>
@@ -68,6 +69,10 @@
                                     class="form-control input-sm select2-hidden-accessible"
                                     id="crud-codice_localita_scarico">
                                 <option value=""> -</option>
+                                @foreach(agent() as $item)
+                        <option value="{{$item->id}}">{{$item->description}}</option>
+                                
+                                @endforeach
                             </select>
                         </div>
                     </div>

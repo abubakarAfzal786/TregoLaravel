@@ -24,7 +24,7 @@ class MaintenanceController extends Controller
      */
     public function index()
     {
-        $maintenance=maintenance::all();
+        $maintenance=maintenance::orderBy('id','desc')->paginate(10);
         return view('pages.maintenance.index')->with('maintenance',$maintenance);
     }
 
