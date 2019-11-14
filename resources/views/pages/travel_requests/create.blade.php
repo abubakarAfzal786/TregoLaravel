@@ -69,7 +69,9 @@
                             <select data-select-2="" name="planCustomId"
                                     class="form-control input-sm select2-hidden-accessible" id="crud-planCustomId">
                                 <option value=""> -</option>
-                                <option value="3">URGENTE</option>
+                              @foreach(planType() as $plans)
+                              <option value="{{$plans->id}}">{{$plans->description}}</option>
+                              @endforeach
                             </select>
                         </div>
                     </div>

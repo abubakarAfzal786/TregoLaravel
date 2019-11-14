@@ -97,9 +97,14 @@
                                                     <span class="badge badge-danger"> URGENTE </span>
                                                 @endif
                                             </td>
+                                            @if($request->planCustom)
                                             <td>
+                                                
                                                 {{ $request->planCustom->id . ' | ' . $request->planCustom->description }}
                                             </td>
+                                            @else
+                                            <td>N/A</td>
+                                            @endif
                                             <td>{{ date("d/m/Y H:i", strtotime($request->data_ora_viaggio_dal)) }}</td>
                                             <td>{{ date("d/m/Y H:i", strtotime($request->data_ora_viaggio_al)) }}</td>
                                             <td> @if(isset($request->transportationType->id)) {{ $request->transportationType->id . ' | ' . $request->transportationType->description }} @endif </td>

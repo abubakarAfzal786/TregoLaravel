@@ -25,7 +25,7 @@ class PlanRequestController extends Controller
      */
     public function index()
     {
-        $planRequest=PlanRequest::where('active', 1)->orderBy('createdAt', 'desc')->take(20)->get();
+        $planRequest=PlanRequest::where('active',1)->orderBy('created_at', 'desc')->take(10)->get();
        
         return view('pages.plan_requests.index')->with('planRequest',$planRequest);
 
@@ -49,6 +49,20 @@ class PlanRequestController extends Controller
      */
     public function store(Request $request)
     {
+        $collection=[];
+        $updateObj=new PlanRequest();
+       $updateObj->planId=request('planId');
+       $updateObj->note=request('note');
+       $updateObj->planDate=request('planDate');
+$collection[]=array(
+    'dateTime'=>request('jsondate'),
+    'addressId'=>request('jsonaddress'),
+    'cdcId'=>request('jsoncdc')
+);
+$places_json=json_encode($collection);
+$updateObj->places_json=$places_json;
+        $updateObj->save();
+        return redirect()->back();
 
     }
 
@@ -69,10 +83,12 @@ class PlanRequestController extends Controller
      * @param  \App\PlanRequest  $planRequest
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,planRequest $planRequestld,$id)
+    public function edit(Request $request,$id)
     {
-        $planRequest= planRequest::all()->where('id',$id)->first();
-        return view('pages.plan_requests.edit')->with('planRequest',$planRequest);
+        $planRequest=PlanRequest::find($id);
+        $places=json_decode($planRequest->places_json);
+    
+        return view('pages.plan_requests.edit',compact('places','planRequest'));
 
     }
 
@@ -85,21 +101,18 @@ class PlanRequestController extends Controller
      */
     public function update(Request $request, PlanRequest $planRequest)
     {
-        $updateObj = TravelRequest::all()->where('id', $request->id)->first();
-        $updateObj->stato_richiesta = $request->stato_richiesta;
-        $updateObj->contratto = $request->contratto;
-        $updateObj->tipo_trasporto = $request->tipo_trasporto;
-        $updateObj->planCustomId = $request->planCustomId;
-        $updateObj->indirizzo_carico = $request->indirizzo_carico;
-        $updateObj->descrizione_cdc_carico = $request->descrizione_cdc_carico;
-        $updateObj->codice_cdc_scarico = $request->codice_cdc_scarico;
-        $updateObj->indirizzo_scarico = $request->indirizzo_scarico;
-        $updateObj->descrizione_cdc_scarico = $request->descrizione_cdc_scarico;
-        $updateObj->adr = $request->adr;
-        $updateObj->vincolo_di_temperatura = $request->vincolo_di_temperatura;
-        $updateObj->confezionato = $request->confezionato;
-        $updateObj->numero_colli = $request->numero_colli;
-        $updateObj->note = $request->note;
+        $collection=[];
+        $updateObj=PlanRequest::where('id',$request->id)->first();
+       $updateObj->planId=request('planId');
+       $updateObj->note=request('note');
+       $updateObj->planDate=request('planDate');
+$collection=array(
+    'dateTime'=>request('jsondate'),
+    'addressId'=>request('jsonaddress'),
+    'cdcId'=>request('jsoncdc')
+);
+$places_json=json_encode($collection);
+$updateObj->places_json=$places_json;
         $updateObj->update();
         return redirect()->back();
     }
@@ -112,6 +125,7 @@ class PlanRequestController extends Controller
      */
     public function destroy(PlanRequest $planRequest)
     {
-        //
+        $planRequest->delete();
+        return redirect()->back();
     }
 }

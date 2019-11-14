@@ -55,19 +55,44 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>#</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
-                                        <td>2011/04/25</td>
-                                        <td>$320,800</td>
+                                        @foreach($devices as $item)
+                                        <tr>
+                                        <td>{{$item->id}}</td>
+                                        <td>{{$item->ati->description}}</td>
+                                        <td>{{$item->barcode}}</td>
 
+                                        <td>{{$item->imei}}</td>
+                                        <td>{{$item->description}}</td>
                                         <td>
-                                            <a class=""><i class="feather icon-edit"></i></a>
-                                            <a class=""><i class="feather icon-trash"></i></a>
-                                        </td>
-                                    </tr>
+                                                @if($item->settings_json)
+                                               
+                                                <ul>
+                                                    @foreach(jsoon_data($item->settings_json) as $data)
+                                                    
+                                                    <li> {{$data->k}} {{$data->v}} </li> 
+       
+                                                    @endforeach
+                                                    </ul> 
+                                           @endif
+                                           </td>
+                                                {{-- <td>$320,800</td> --}}
+        
+                                                <td>
+                                                        <a href="{{route('devices.edit',$item->id)}}" class=""><i
+                                                            class="feather icon-edit" vx-tooltip
+                                                            title="Modifica"></i></a>
+                                                <form class="travelrequestform"
+                                                      action="{{ route('devices.destroy', $item->id)}}"
+                                                      method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <a class="travelrequest" href="#"><i class="feather icon-trash"
+                                                                                         data-toggle-tooltip
+                                                                                         title="Elimina"></i></a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                   
 
                                     </tfoot>
                                 </table>

@@ -4,10 +4,10 @@
     <div class="card">
         <div class="card-header">
             <h4 class="mb-0">Richieste Viaggi - NUOVO</h4>
+
         </div>
-        <form class="form form-vertical" method="post" action="{{ route('travel_requests.update',$travelRequest->id) }}">
+        <form class="form form-vertical" method="POST" action="{{ route('travel_requests.store') }}">
             @csrf
-            {{ method_field('PATCH') }}
             <div class="card-content">
                 <div class="card-body">
                     <div class="form-group row">
@@ -16,10 +16,11 @@
 
                             <select required="" data-select-2="" name="stato_richiesta"
                                     class="form-control input-sm select2-hidden-accessible" id="crud-stato_richiesta">
-                                <option value="I" @if($travelRequest->stato_richiesta == 'I') selected @endif >In Lavorazione</option>
-                                <option value="R" @if($travelRequest->stato_richiesta == 'R') selected @endif >In Attesa</option>
-                                <option value="C" @if($travelRequest->stato_richiesta == 'C') selected @endif >Pianficata</option>
-                                <option value="A" @if($travelRequest->stato_richiesta == 'A') selected @endif >Annullata</option>
+                                <option value=""> -</option>
+                                <option @if($travelRequest->stato_richiesta=="I") selected value="I" @endif selected="">In Lavorazione</option>
+                                <option @if($travelRequest->stato_richiesta=="R") selected value="R" @endif>In Attesa</option>
+                                <option @if($travelRequest->stato_richiesta=="C") selected value="C" @endif>Pianficata</option>
+                                <option @if($travelRequest->stato_richiesta=="A") selected value="A" @endif>Annullata</option>
                             </select>
                         </div>
                     </div>
@@ -32,8 +33,10 @@
                             <select required="" data-select-2="" name="contratto"
                                     class="form-control input-sm select2-hidden-accessible" id="crud-contratto">
                                 <option value=""> -</option>
-                                <option value="1">AUSL ROMAGNA</option>
-                                <option value="2">I.R.C.S.S Meldola</option>
+                               @foreach(contracts() as $con)
+                               <option @if($con->id==$travelRequest->contratto) selected value="{{$con->id}}" @endif>{{$con->description}}</option>
+                               @endforeach
+                               
                             </select>
                         </div>
                     </div>
@@ -49,9 +52,9 @@
                             <select required="" data-select-2="" name="tipo_trasporto"
                                     class="form-control input-sm select2-hidden-accessible" id="crud-tipo_trasporto">
                                 <option value=""> -</option>
-                                <option value="1">PROGRAMMATO</option>
-                                <option value="2">PRONTA DISPONIBILITA</option>
-                                <option value="3">URGENTE</option>
+                                <option @if($travelRequest->tipo_trasporto=="1") selected @endif value="1">PROGRAMMATO</option>
+                                <option @if($travelRequest->tipo_trasporto=="2") selected @endif value="2">PRONTA DISPONIBILITA</option>
+                                <option @if($travelRequest->tipo_trasporto=="3") selected @endif value="3">URGENTE</option>
                             </select>
                         </div>
                     </div>
@@ -79,7 +82,7 @@
                             Indirizzo
                             Carico</label>
                         <div class="col-sm-8" id="wrap-indirizzo_carico">
-                            <input name="indirizzo_carico" type="text" class="form-control input-sm" value="{{$travelRequest->indirizzo_carico}}"
+                        <input name="indirizzo_carico" type="text" class="form-control input-sm" value="{{$travelRequest->indirizzo_carico}}"
                                    placeholder="Descrizione Indirizzo Carico">
                         </div>
                     </div>
@@ -93,7 +96,7 @@
                             Carico</label>
                         <div class="col-sm-8" id="wrap-descrizione_cdc_carico">
                             <input name="descrizione_cdc_carico" type="text" class="form-control input-sm"
-                                   value="{{$travelRequest->descrizione_cdc_carico}}" placeholder="Descrizione CDC Carico">
+                        value="{{$travelRequest->descrizione_cdc_carico}}" placeholder="Descrizione CDC Carico">
                         </div>
                     </div>
 
@@ -124,9 +127,11 @@
                         <div class="col-sm-8" id="wrap-codice_cdc_scarico">
 
                             <select data-select-2="" name="codice_cdc_scarico"
-                                    class="form-control input-sm select2-hidden-accessible" id="crud-codice_cdc_scarico">
+                                    class="form-control input-sm select2-hidden-accessible chosen-select" id="crud-codice_cdc_scarico">
                                 <option value=""> -</option>
-                                <option value="3">URGENTE</option>
+                               @foreach(cdc() as $cd)
+                               <option @if($cd->id==$travelRequest->codice_cdc_scarico) selected  value="{{$cd->id}}" @endif>{{$cd->description}}</option>
+                               @endforeach
                             </select>
                         </div>
                     </div>
@@ -139,7 +144,7 @@
                             Indirizzo
                             Scarico</label>
                         <div class="col-sm-8" id="wrap-indirizzo_scarico">
-                            <input name="indirizzo_scarico" type="text" class="form-control input-sm" value="{{$travelRequest->indirizzo_scarico}}"
+                        <input name="indirizzo_scarico" type="text" class="form-control input-sm" value="{{$travelRequest->indirizzo_scarico}}"
                                    placeholder="Descrizione Indirizzo Scarico">
                         </div>
                     </div>
@@ -153,7 +158,7 @@
                             Scarico</label>
                         <div class="col-sm-8" id="wrap-descrizione_cdc_scarico">
                             <input name="descrizione_cdc_scarico" type="text" class="form-control input-sm"
-                                   value="{{$travelRequest->descrizione_cdc_scarico}}" placeholder="Descrizione CDC Scarico">
+                        value="{{$travelRequest->descrizione_cdc_scarico}}" placeholder="Descrizione CDC Scarico">
                         </div>
                     </div>
 
@@ -168,8 +173,8 @@
                                     class="form-control input-sm select2-hidden-accessible" id="crud-adr"
                                     tabindex="-1" aria-hidden="true">
                                 <option value=""> -</option>
-                                <option value="SI">SI</option>
-                                <option value="NO">NO</option>
+                                <option value="SI" @if($travelRequest->adr="SI") selected @endif>SI</option>
+                                <option value="NO" @if($travelRequest->adr="SI") selected @endif>NO</option>
                             </select>
                         </div>
                     </div>
@@ -187,22 +192,9 @@
                                     class="form-control input-sm select2-hidden-accessible"
                                     id="crud-vincolo_di_temperatura">
                                 <option value=""> -</option>
-                                <option value="1">-30</option>
-                                <option value="2">2..6</option>
-                                <option value="3">2..8</option>
-                                <option value="4">2..8</option>
-                                <option value="5">-25..-15</option>
-                                <option value="6">15..25</option>
-                                <option value="7">20..36</option>
-                                <option value="8">20..24</option>
-                                <option value="9">10..28</option>
-                                <option value="10">19..36</option>
-                                <option value="11">1..38</option>
-                                <option value="13">-20..-5</option>
-                                <option value="14">19..23</option>
-                                <option value="15">1..38</option>
-                                <option value="16">4..28</option>
-                                <option value="17">-18..-15</option>
+                                @foreach(temprature() as $tem)
+                           <option @if($travelRequest->vincolo_di_temperatura==$tem->id) selected @endif value="{{$tem->id}}">{{$tem->description}}</option>
+                           @endforeach
                             </select>
                         </div>
                     </div>
@@ -217,8 +209,8 @@
                             <select required="" data-select-2="" name="confezionato"
                                     class="form-control input-sm select2-hidden-accessible" id="crud-confezionato">
                                 <option value=""> -</option>
-                                <option value="SI">SI</option>
-                                <option value="NO">NO</option>
+                                <option value="SI" @if($travelRequest->confezionato="SI") selected @endif>SI</option>
+                                <option value="NO" @if($travelRequest->confezionato="NO") selected @endif>NO</option>
                             </select>
                         </div>
                     </div>
@@ -230,7 +222,7 @@
                         <label class="control-label col-sm-4 text-right font-weight-bold" for="crud-numero_colli">Numero
                             Colli</label>
                         <div class="col-sm-8" id="wrap-numero_colli">
-                            <input name="numero_colli" type="text" class="form-control input-sm" value="{{$travelRequest->numero_colli}}"
+                        <input name="numero_colli" type="text" class="form-control input-sm" value="{{$travelRequest->numero_colli}}"
                                    placeholder="Numero Colli">
                         </div>
                     </div>
@@ -243,7 +235,7 @@
                         <div class="col-sm-8" id="wrap-note">
 
 
-                            <textarea name="note" class="form-control input-sm" value="{{$travelRequest->note}}" placeholder="Note"></textarea>
+                        <textarea name="note" class="form-control input-sm" placeholder="Note">{{$travelRequest->note}}</textarea>
 
                         </div>
                     </div>
@@ -256,7 +248,7 @@
             <div class="card-footer mb-3">
                 <div class="pull-right">
 
-                    <a class="btn btn-warning btn-xs text-white">
+                    <a class="btn btn-danger btn-xs text-white">
                         Annulla
                     </a>
                     <button type="submit" class="btn btn-success btn-xs text-white">
@@ -268,16 +260,16 @@
     </div>
 
 
+@push('js')
 
 
-
-
-
-
-
-
-
-
-
+<script src="{{ asset('assets/css/choosen/chosen.jquery.min.js') }}"></script>
+<script>
+$(".chosen-select").chosen({width: "100%"});
+</script>
+@endpush
+@push('css')
+<link rel="stylesheet" href="{{ asset('assets/css/choosen/chosen.min.css') }}">
+@endpush
 
 @endsection

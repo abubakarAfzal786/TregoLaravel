@@ -24,7 +24,8 @@ class TravelRequestController extends Controller
      */
     public function index()
     {
-        $allTravelRequest = TravelRequest::where('active', 1)->orderBy('createdAt', 'desc')->take(10)->get();
+        $allTravelRequest = TravelRequest::where('active', 1)->orderBy('created_at', 'asc')->take(10)->get();
+       
         return view('pages.travel_requests.index')->with('travelRequest', $allTravelRequest);
     }
 
@@ -46,7 +47,7 @@ class TravelRequestController extends Controller
      */
     public function store(Request $request)
     {
-
+        $travel=new TravelRequest();
         $request->validate([
             'stato_richiesta' => 'required',
             'contratto' => 'required',
@@ -64,10 +65,23 @@ class TravelRequestController extends Controller
             'numero_colli' => 'required',
             'note' => 'required',
         ]);
-
-
-        $travelRequest = new TravelRequest();
-        return $travelRequest->saveRequest($request);
+$travel->stato_richiesta=request('stato_richiesta');
+$travel->contratto=request('contratto');
+$travel->tipo_trasporto=request('tipo_trasporto');
+$travel->planCustomId=request('planCustomId');
+$travel->indirizzo_scarico=request('indirizzo_carico');
+$travel->descrizione_cdc_carico=request('descrizione_cdc_carico');
+$travel->codice_cdc_scarico=request('codice_cdc_scarico');
+$travel->codice_localita_scarico=request('codice_localita_scarico');
+$travel->indirizzo_scarico=request('indirizzo_scarico');
+$travel->descrizione_cdc_scarico=request('descrizione_cdc_scarico');
+$travel->adr=request('adr');
+$travel->vincolo_di_temperatura=request('vincolo_di_temperatura');
+$travel->confezionato=request('confezionato');
+$travel->numero_colli=request('numero_colli');
+$travel->note=request('note');
+$travel->save();
+return redirect()->back();
 
 
     }
