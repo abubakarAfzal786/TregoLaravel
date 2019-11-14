@@ -25,7 +25,16 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        return view('pages.transaction.create');
+        $data=[];
+        $data['ati']=\App\Ati::all();
+        $data['plans']  = \App\Plan::all();
+        $data['addresses'] = \App\Place::all();
+        $data['agents'] = \App\Agent::all();
+        $data['devices'] = \App\Device::all();
+        $data['cars'] = \App\Vehicle::all();
+        $data['types'] = \App\TransactionType::all();
+        $data['cdcs'] = \App\CDCS::all();
+        return view('pages.transaction.create' , $data);
 
     }
 
@@ -37,7 +46,21 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $trans = new \App\Transaction();
+        $trans->atiId = request('ati' , 0);
+        $trans->agentId = request('agent', 0);
+        $trans->deviceId= request('device',0);
+        $trans->cdcId = request('cdc' , 0);
+        $trans->placeId= request('address', 0);
+        $trans->addressId= $trans->place->addressId;
+        $trans->planId = request('plan' , 0);
+        $trans->transactionTypeId= request('transtype',0);
+        $trans->vehicleId = 66;
+        $trans->docId = request('docId' , '');
+        $trans->ddtId = request('ddtId' , '');
+        $trans->save();
+        $trans->time = $trans->created_at;
+        $trans->save();
     }
 
     /**

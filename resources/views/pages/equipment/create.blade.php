@@ -18,19 +18,21 @@
                             <select required="" data-select-2="" name="stato_richiesta"
                                     class="form-control input-sm select2-hidden-accessible" id="crud-stato_richiesta">
                                 <option value=""> -</option>
-                                <option value="I" selected="">In Lavorazione</option>
-                                <option value="R">In Attesa</option>
-                                <option value="C">Pianficata</option>
-                                <option value="A">Annullata</option>
+                                @if(!empty($ati))
+                                    @foreach($ati as $key => $val)
+                                        <option value="{{$val->id}}">{{$val->description}}</option>
+                                    @endforeach
+                                @endif
+                                
                             </select>
                         </div>
                     </div>
                     <hr>
 
                     <div class="form-group row">
-                        <label class="control-label col-sm-4 text-right font-weight-bold" for="crud-indirizzo_carico">Time</label>
+                        <label class="control-label col-sm-4 text-right font-weight-bold" for="crud-indirizzo_carico">Days</label>
                         <div class="col-sm-8" id="wrap-indirizzo_carico">
-                            <input name="indirizzo_carico" type="text" class="form-control input-sm" value=""
+                            <input name="days" type="number" class="form-control input-sm" value=""
                                    placeholder="Descrizione Indirizzo Carico">
                         </div>
                     </div>
@@ -38,56 +40,32 @@
                     <hr>
 
 
-                    <div class="form-group row">
-                        <label class="control-label col-sm-4 text-right font-weight-bold"
-                               for="crud-contratto">Contenitore
-                        </label>
-                        <div class="col-sm-8" id="wrap-contratto">
-
-                            <select required="" data-select-2="" name="contratto"
-                                    class="form-control input-sm select2-hidden-accessible" id="crud-contratto">
-                                <option value=""> -</option>
-                                <option value="1">AUSL ROMAGNA</option>
-                                <option value="2">I.R.C.S.S Meldola</option>
-                            </select>
-                        </div>
-                    </div>
-
+                    
+                    
                     <hr>
-
-
-                    <div class="form-group row">
-                        <label class="control-label col-sm-4 text-right font-weight-bold" for="crud-tipo_trasporto">Contenitore Tipo</label>
-                        <div class="col-sm-8" id="wrap-tipo_trasporto">
-
-                            <select required="" data-select-2="" name="tipo_trasporto"
-                                    class="form-control input-sm select2-hidden-accessible" id="crud-tipo_trasporto">
-                                <option value=""> -</option>
-                                <option value="1">PROGRAMMATO</option>
-                                <option value="2">PRONTA DISPONIBILITA</option>
-                                <option value="3">URGENTE</option>
-                            </select>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="form-group row">
-                        <label class="control-label col-sm-4 text-right font-weight-bold" for="crud-indirizzo_carico">Qty</label>
+                    <!-- <div class="form-group row">
+                        <label class="control-label col-sm-4 text-right font-weight-bold" for="crud-indirizzo_carico">Barcode</label>
                         <div class="col-sm-8" id="wrap-indirizzo_carico">
-                            <input name="indirizzo_carico" type="text" class="form-control input-sm" value=""
+                            <input name="barcode" type="text" class="form-control input-sm" value=""
                                    placeholder="Descrizione Indirizzo Carico">
                         </div>
                     </div>
 
-                    <hr>
+                    <hr> -->
 
 
                     <div class="form-group row">
                         <label class="control-label col-sm-4 text-right font-weight-bold" for="crud-planCustomId">Vincolo Temp.</label>
                         <div class="col-sm-8" id="wrap-planCustomId">
 
-                            <select data-select-2="" name="planCustomId"
+                            <select data-select-2="" name="temp"
                                     class="form-control input-sm select2-hidden-accessible" id="crud-planCustomId">
                                 <option value=""> -</option>
+                                @if(!empty($temp))
+                                    @foreach($temp as $key => $list)
+                                        <option value="{{$list->id}}">{{$list->description}}</option>
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>
@@ -95,17 +73,24 @@
                     <hr>
 
                     <div class="form-group row">
-                        <label class="control-label col-sm-4 text-right font-weight-bold" for="crud-planCustomId">Trasp. Tipo</label>
+                        <label class="control-label col-sm-4 text-right font-weight-bold" for="crud-planCustomId">Probe.</label>
                         <div class="col-sm-8" id="wrap-planCustomId">
 
-                            <select data-select-2="" name="planCustomId"
+                            <select data-select-2="" name="probe"
                                     class="form-control input-sm select2-hidden-accessible" id="crud-planCustomId">
                                 <option value=""> -</option>
+                                @if(!empty($probe))
+                                    @foreach($probe as $key => $list)
+                                        <option value="{{$list->id}}">{{$list->description}}</option>
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>
 
                     <hr>
+
+                    
 
 
                 </div>

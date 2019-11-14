@@ -47,7 +47,8 @@ class MaintenanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $maintenance=new Maintenance();
+        $
     }
 
     /**

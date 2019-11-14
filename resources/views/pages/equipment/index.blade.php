@@ -47,23 +47,49 @@
                                     <tr>
                                         <th> <a href="#">Id </a> </th>
                                         <th> <a href="#">ddt@doc </a> </th>
-                                        <th>  <a href="#">Type </a> </th>
-                                        <th> <a href="#">		Time</a> </th>
-                                        <th> <a href="#"> 	docId	</a>  </th>
-                                        <th> <a href="#">	ddtId </a> </th>
-                                        <th> <a href="#">Contenitore	 </a> </th>
-                                        <th> <a href="#">	Contenitore Tipo</a> </th>
-                                        <th> <a href="#">	Qty	</a> </th>
-                                        <th> <a href="#">	Sonda	</a> </th>
-                                        <th> <a href="#">	Vincolo Temp.	</a> </th>
-                                        <th> <a href="#">	Trasp. Tipo	</a> </th>
+                                        <th>  <a href="#">Days </a> </th>
+                                        <th> <a href="#">Probe</a> </th>
+                                        <th> <a href="#"> 	Barcode</a>  </th>
+                                        <th> <a href="#">Vincolo Temp.</a> </th>
+                                        <
 
                                         <th> <a href="#">	Azioni	</a> </th>
 
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
+                                    @if(!empty($equip))
+                                    @foreach($equip as $key => $list)
+                                        <tr>
+                                        <td>{{$list->id}}</td>
+                                        <td>{{$list->atiname->description}}</td>
+                                        <td>{{$list->sanificationIntervalDays}}</td>
+                                        <td>{{$list->probe->description}}</td>
+                                        <td>{{$list->barcode}}</td>
+                                        <td>{{$list->temperature->description}}</td>
+                                        <!-- <td>$320,800</td>
+                                        <td>#</td>
+                                        <td>System Architect</td>
+                                        <td>Edinburgh</td>
+                                        <td>61</td>
+                                        <td>2011/04/25</td>
+                                        <td>2011/04/25</td> -->
+
+
+                                        <td>
+                                            <a class="" href="{{route('equipment.edit' , $list->id)}}"><i class="feather icon-edit"></i></a>
+                                            
+                                            <form action="{{route('equipment.destroy' , $list->id)}}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="fabutton"><i class="feather icon-trash"></i></button>
+                                            </form>
+                                            <!-- <a class=""><i class="feather icon-trash"></i></a> -->
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                    @endif
+                                    <!-- <tr>
                                         <td>#</td>
                                         <td>System Architect</td>
                                         <td>Edinburgh</td>
@@ -82,7 +108,7 @@
                                             <a class=""><i class="feather icon-edit"></i></a>
                                             <a class=""><i class="feather icon-trash"></i></a>
                                         </td>
-                                    </tr>
+                                    </tr> -->
 
                                     </tfoot>
                                 </table>

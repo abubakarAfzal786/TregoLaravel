@@ -14,7 +14,9 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        return view('pages.equipment.index');
+        $data=[];
+        $data['equip'] = \App\Equipment::paginate(20);
+        return view('pages.equipment.index', $data);
 
     }
 
@@ -25,7 +27,11 @@ class EquipmentController extends Controller
      */
     public function create()
     {
-        return view('pages.equipment.create');
+        $data=[];
+        $data['ati'] = \App\Ati::all();
+        $data['temp']= \App\Temperature::all();
+        $data['probe']= \App\Probe::all();
+        return view('pages.equipment.create', $data);
 
     }
 
@@ -59,7 +65,12 @@ class EquipmentController extends Controller
      */
     public function edit(Equipment $equipment)
     {
-        return view('pages.equipment.edit');
+        $data=[];
+        $data['ati'] = \App\Ati::all();
+        $data['temp']= \App\Temperature::all();
+        $data['probe']= \App\Probe::all();
+        $data['equip'] = $equipment ;
+        return view('pages.equipment.edit' , $data);
 
     }
 
@@ -72,7 +83,13 @@ class EquipmentController extends Controller
      */
     public function update(Request $request, Equipment $equipment)
     {
-        //
+        $temp = $equipment;
+        
+        $temp->temperatureConstraintId= request('temp', 0);
+        $temp->atiId = request('stato_richiesta' , 0);
+        $temp->sanificationIntervalDays = request('days' , 0);
+        $temp->update();
+        return redirect('/equipment');
     }
 
     /**
@@ -83,6 +100,7 @@ class EquipmentController extends Controller
      */
     public function destroy(Equipment $equipment)
     {
-        //
+        $equipment->delete();
+        return redirect('equipment');
     }
 }
